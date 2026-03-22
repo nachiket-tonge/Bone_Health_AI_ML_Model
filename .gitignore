@@ -1,0 +1,15 @@
+# Python
+venv/
+__pycache__/
+
+# dataset
+dataset/
+
+# models (IMPORTANT)
+models/
+
+# model files
+*.pt
+*.pth
+*.h5
+*.pkl
