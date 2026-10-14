@@ -1,161 +1,167 @@
-Perfect — this is exactly how a clean ML project should be shared 👏
-Model external, repo lightweight. You’re doing it right.
+# Bone Health AI — ML Service
 
-Here’s your **ready-to-paste README.md** with your Drive link integrated 👇
+An AI-powered medical imaging and bone health assessment service that provides **fracture detection, bone age assessment, and bone mineral density (BMD) prediction** through machine learning models and REST APIs.
 
----
+## Features
 
-# 📄 README.md (ML Backend Repo)
+- **Fracture Detection:** Analyze bone X-ray images to predict potential fractures.
+- **Bone Age Assessment:** Estimate bone age from relevant medical images.
+- **Bone Mineral Density (BMD) Prediction:** Predict BMD-related results using patient information.
+- **X-ray Validation:** Help identify whether an uploaded image is suitable for bone X-ray analysis.
+- **Grad-CAM Visualization:** Generate visual explanations highlighting image regions that influence model predictions.
+- **REST API:** Expose ML inference functionality through FastAPI.
 
-```md
-# 🦴 Bone Health AI — ML Backend (Fracture Detection)
+## Technology Stack
 
-This repository contains the Machine Learning backend for detecting bone fractures from X-ray images using a trained model.
+- Python
+- FastAPI
+- PyTorch
+- Torchvision
+- timm
+- NumPy
+- Pandas
+- scikit-learn
+- OpenCV
+- Pillow
+- Joblib
+- Uvicorn
 
----
+## Project Structure
 
-## 🚀 Features
-
-- 🤖 Fracture detection using deep learning
-- 🔥 Grad-CAM heatmap visualization
-- ⚡ FastAPI-based API
-- 📤 Accepts image input and returns prediction + confidence
-
----
-
-## 🛠 Tech Stack
-
-- **Backend:** FastAPI
-- **ML Framework:** PyTorch / TensorFlow (based on your model)
-- **Language:** Python
-
----
-
-## 📁 Project Structure
-
+```text
+Bone_Health_AI_ML_Model/
+├── main.py
+├── requirements.txt
+├── routers/
+│   ├── bmd.py
+│   ├── bone_age.py
+│   └── fracture.py
+├── services/
+│   ├── bmd_service.py
+│   ├── bone_age_service.py
+│   ├── fracture_service.py
+│   └── xray_service.py
+├── utils/
+│   └── gradcam.py
+├── models/                 # Download separately
+├── dataset/                # Local datasets; not included
+└── README.md
 ```
 
-Bone_Health_AI_ML_Model/
-├── app.py
-├── predict.py
-├── gradcam.py
-├── requirements.txt
-├── models/ (NOT included in repo)
+## Prerequisites
 
+- Python 3.10 or a compatible Python version for the installed dependencies.
+- pip
+- Git
+- Trained model files downloaded separately.
+- Sufficient memory and storage for the selected ML models.
 
+## Installation
 
-## 📦 Model Download
+### 1. Clone the repository
 
-The trained model is not included in this repository due to size limitations.
-
-👉 Download it from Google Drive:  
-https://drive.google.com/drive/folders/1lJ08FQKZDu44ajhrIgh2lkO1Bi4Puf9p?usp=sharing
-
-### After downloading:
-
-Place the `models/` folder inside the project root:
-
-bash
-Bone_Health_AI_ML_Model/
-  models/
-
-
-## ⚙️ Setup Instructions
-
-### 1️⃣ Clone the repository
-
-bash
-git clone https://github.com/YOUR_USERNAME/Bone_Health_AI_ML_Model.git
+```bash
+git clone https://github.com/nachiket-tonge/Bone_Health_AI_ML_Model.git
 cd Bone_Health_AI_ML_Model
+```
 
+### 2. Create a virtual environment
 
+Linux/macOS:
 
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-### 2️⃣ Create virtual environment
+Windows:
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # Linux / Mac
-venv\Scripts\activate      # Windows
+venv\Scripts\activate
 ```
 
----
-
-### 3️⃣ Install dependencies
+### 3. Install dependencies
 
 ```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
+**Note:** PyTorch installation requirements can vary depending on your operating system and whether you use a CPU or a compatible GPU.
 
-### 4️⃣ Run the server
+## Download Trained Models
+
+The trained model files are hosted separately on Google Drive to keep large model artifacts out of the Git repository.
+
+**[Download Bone Health AI Models from Google Drive](https://drive.google.com/drive/folders/1sqbvalWl_E7NYhHGjF9L8s-44u5AXBd8)**
+
+### Setup
+
+1. Open the Google Drive folder above.
+2. Download the model files required by the prediction services.
+3. Create the `models/` directory in the repository if it does not already exist.
+4. Place the downloaded files in the appropriate locations expected by the service code.
+5. Verify that the model filenames and paths match those referenced in the relevant files under `services/`.
+
+> **Important:** The exact filenames and directory structure depend on the trained models and the paths configured in the source code. Ensure these match before starting inference.
+
+## Run the ML API
+
+Start the FastAPI application from the repository root:
 
 ```bash
-uvicorn app:app --reload
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
----
+The API should be available at:
 
-### Server will run at:
-
-👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
----
-
-## 📡 API Endpoint
-
-### 🔹 POST `/predict`
-
----
-
-### Request:
-
-* FormData with image file
-
----
-
-### Response:
-
-```json
-{
-  "prediction": "Fracture Detected",
-  "confidence": 0.92,
-  "heatmap": "base64_encoded_image"
-}
+```text
+http://127.0.0.1:8000
 ```
 
----
+FastAPI interactive API documentation:
 
-## 🧪 How to Test
+```text
+http://127.0.0.1:8000/docs
+```
 
-You can use:
+The available routes depend on the routers registered in `main.py`.
 
-* Postman
-* Curl
-* Your frontend app
+## Integration
 
----
+The ML service is designed to provide prediction functionality to the Bone Health AI application.
 
-## ⚠️ Notes
+Typical integration flow:
 
-* Make sure `models/` folder is present before running
-* Dataset is not included
-* Virtual environment is ignored
+1. A user submits an image or patient information through the application.
+2. The application sends a request to the appropriate API endpoint.
+3. The ML service validates the input and loads the required model.
+4. The service performs inference.
+5. The prediction result is returned to the calling application.
 
----
+The frontend and backend should be configured to use the correct ML service URL for the local or deployed environment.
 
-## 🧠 Future Improvements
+## Development and Testing
 
-* Add Bone Age prediction model
-* Add BMD risk model
-* Deploy backend to cloud
-* Optimize model performance
+Check the available Python scripts before running them. The repository includes scripts for model inspection and testing, including:
 
----
+- `check_model.py`
+- `check_bone_age.py`
+- `inspect_bmd.py`
+- `inspect_bone_age.py`
+- `test_bmd.py`
+- `test_xray_detector.py`
 
-## 👨‍💻 Author
+Run a script from the repository root using the active virtual environment. Some scripts may require trained models or local test data.
 
-Nachiket
+## Important Notes
 
----
+- Model files and datasets are downloaded or configured separately and are not included in the Git repository.
+- Never commit private datasets, patient-identifiable images, credentials, or local environment files.
+- Use compatible model files and preprocessing steps for each prediction service.
+- Predictions are intended for research and decision-support development, not as a substitute for diagnosis by a qualified medical professional.
+
+## License
+
+Add the applicable license before redistributing this project or its trained model files.
